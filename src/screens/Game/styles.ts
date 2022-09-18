@@ -32,14 +32,19 @@ export const styles = StyleSheet.create({
     containerList: {
         width: '100%'
     },
+    containerEmpty: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     contentList: {
         paddingLeft: 32,
         paddingRight: 64,
         alignItems: 'flex-start'
     },
-    emptyListText:{
-        color:THEME.COLORS.CAPTION_300,
-        fontSize:THEME.FONT_SIZE.SM,
-        fontFamily:THEME.FONT_FAMILY.REGULAR,
+    emptyListText: {
+        color: THEME.COLORS.CAPTION_300,
+        fontSize: THEME.FONT_SIZE.SM,
+        fontFamily: THEME.FONT_FAMILY.REGULAR,
     }
 })

@@ -10,15 +10,23 @@ import logoImg from '../../assets/logo-nlw-esports.png';
 import { Heading } from "../../components/Heading";
 import { DuoCard, DuoCardProps } from "../../components/DuoCard";
 import { useEffect, useState } from "react";
+import { DuoMatch } from "../../components/DuoMatch";
 
 export function Game() {
     const route = useRoute();
     const game = route.params as GameParams;
     const navigation = useNavigation();
     const [ads, setAds] = useState<DuoCardProps[]>([])
+    const [userSelected, setUserSelected] = useState('');
 
     function handleGoBack() {
         navigation.goBack()
+    }
+
+    async function getDiscordUser(adsId: string) {
+        await fetch(`http://192.168.0.14:3000/ads/${adsId}/discord`)
+            .then(response => response.json())
+            .then(data => setUserSelected(data.discord))
     }
 
     useEffect(() => {
@@ -61,19 +69,23 @@ export function Game() {
                     data={ads}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
-                        <DuoCard data={item} onConnect={() => {}}/>
+                        <DuoCard data={item} onConnect={() => { getDiscordUser(item.id)}} />
                     )}
                     horizontal
-                    contentContainerStyle={styles.contentList}
+                    contentContainerStyle={[ads.length > 0 ? styles.containerList : styles.containerEmpty]}
                     showsHorizontalScrollIndicator={false}
-                    style={[ads.length > 0 ? styles.containerList : {flex:1, alignItems:'center', justifyContent:'center'}]}
                     ListEmptyComponent={() => (
                         <Text style={styles.emptyListText}>
                             Não há anúncios para este jogo.
                         </Text>
                     )}
-                />  
+                />
 
+                <DuoMatch
+                    visible={userSelected.length > 0}
+                    discord={userSelected}
+                    onClose={() => setUserSelected('')}
+                />
             </SafeAreaView>
         </Background>
     )
